@@ -1,8 +1,8 @@
-import { ApolloServer } from "apollo-server";
+import { ApolloServer, gql } from "apollo-server";
 import mongoose from "mongoose";
 // import { startStandaloneServer } from "@apollo/server/standalone";
-import typeDefs from "../graphQL/typeDefs";
-import resolvers from "../graphQL/resolvers";
+import { typeDefs } from "../graphQL/typeDefs.js";
+import { resolvers } from "../graphQL/resolvers/index.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -11,12 +11,13 @@ const startServer = async () => {
     const server = new ApolloServer({
       typeDefs,
       resolvers,
+      context: ({ req }) => ({ req }),
     });
 
     await mongoose.connect(process.env.MONGODB);
     console.log(`🚀 MongoDB Connected`);
 
-    const { url } = await server.listen({ port: 3030 });
+    const { url } = await server.listen({ port: 4040 });
     console.log(`🚀 Server Running at ${url}`);
 
     // const { url(server, {
